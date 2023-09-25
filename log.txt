@@ -1,0 +1,8 @@
+scanner.l: In function ‘yylex’:
+scanner.l:79:19: error: expected ‘;’ before ‘}’ token
+   79 |     return(NUMBER)
+      |                   ^
+      |                   ;
+   80 | }
+      | ~                  
+make: *** [Makefile:52: lex.yy.o] Error 1

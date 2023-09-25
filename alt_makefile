@@ -2,14 +2,14 @@
 # Sample lex/yacc Makefile
 # Shawn Ostermann - Mon Sep 24, 2001
 #
-CFLAGS = -g -Wall -Werror -O2 
+CFLAGS = -g -Wall -Werror -O2
 CC = gcc
 CXX = g++
 
-PROGRAM = adv
+PROGRAM = bash
 CFILES = 
-CCFILES = adv.cc
-HFILE = adv.h
+CCFILES = bash.cc
+HFILE = bash.h
 
 
 ##################################################
@@ -18,14 +18,12 @@ HFILE = adv.h
 #
 ##################################################
 
-
-all: adv
-
+make: bash
 # compute the OFILES
 OFILES = ${CFILES:.c=.o} ${CCFILES:.cc=.o}
-
-adv.o: adv.cc
-	${CXX} -g -c -o adv.o adv.cc
+	
+bash.o: bash.cc
+	${CXX} -g -c -o bash.o bash.cc
 
 # all of the .o files that the program needs
 OBJECTS = parser.tab.o lex.yy.o ${OFILES}
@@ -34,7 +32,7 @@ OBJECTS = parser.tab.o lex.yy.o ${OFILES}
 # How to make the whole program
 # (don't forget the Lex Library "-ll")
 ${PROGRAM} : ${OBJECTS}
-	${CXX} ${CFLAGS} ${OBJECTS} -o ${PROGRAM} 
+	${CXX} ${CFLAGS} ${OBJECTS} -o ${PROGRAM}
 
 
 # 
@@ -54,7 +52,7 @@ parser.tab.h: parser.tab.c
 lex.yy.c : scanner.l parser.tab.h ${HFILE}
 	flex ${LFLAGS} scanner.l
 lex.yy.o: lex.yy.c
-	${CC} ${CFLAGS} -Wno-unused-function -g -c lex.yy.c
+	${CC} ${CFLAGS} -Wno-unused-function -c lex.yy.c
 
 #
 # File dependencies
