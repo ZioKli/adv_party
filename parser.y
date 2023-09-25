@@ -62,112 +62,95 @@ input: adventuring_party
 
 adventuring_party: adventurers EOLN
 		{
+			/* We need to return a party struct here */
 			struct party p = {
-				strdup($1->name),
-				strdup($1->portrait),
-				$1
+				NULL,  /*party leader*/
+				NULL,  /*party leader*/			
+				NULL,  /*first party member*/
 			};
 			$$ = p;
 		}
 	;
 
-adventurers: adv adventurers
+adventurers: /* add the first production rule here*/
 		{
-			$1->next = $2;
-			$$ = $1;
+			/* HINT: here we are stiching together two adventurer nodes*/
 		}
-	| adv
+	| /* Another production rule here*/
 	;
 
-adv: PORTRAIT character_name a_bag
+adv: /* add the production rule for a single adventurer here */
 		{
-			struct adventurer* a = (struct adventurer *) MallocZ(sizeof(struct adventurer));
-			a->portrait = $1;
-			a->name = $2;
-			a->bag = $3;
-			a->next = NULL;
-			$$ = a;
+			/* HINT: here we are creating a single adventurer node */
 		}
 	;
 
+/*
+ * This rule is provided to simplify the recognition of character names 
+ */
 character_name: CHARACTER_NAME
 	| ITEM_NAME
   ;
 
-a_bag: leather_bag
-	| silk_bag
-	| canvas_bag
+a_bag: /* a bag can be 3 different types of bags the first one goes here*/
+	| /* the second goes here */
+	| /* the third goes here */
 	;
 
-leather_bag: LEATHER_BAG_OPEN items LEATHER_BAG_CLOSE
+leather_bag: /* add the production rule for a leather bag with items in it here */
 		{
-			struct adv_bag b = {
-				LEATHER,
-				$2
-			};
-			$$ = b;
+			/* We need to return an adv_bag struct with the type set to LEATHER here */
 		}
-	| LEATHER_BAG_OPEN LEATHER_BAG_CLOSE
+	| /* the rule for an empty leather bag goes here */
 		{
-			struct adv_bag b = {
-				LEATHER,
-				NULL
-			};
-			$$ = b;
+			/* We need to return an adv_bag struct with the type set to LEATHER here 
+				 We don't have any items, so what do we set the first item field on the 
+				 adv_bag struct to?
+			*/
 		}
-silk_bag: SILK_BAG_OPEN items SILK_BAG_CLOSE
+silk_bag: /* add the production rule for a silk bag with items in it here */
 		{
-			struct adv_bag b = {
-				SILK,
-				$2
-			};
-			$$ = b;
+			/* We need to return an adv_bag struct with the type set to SILK here */
 		}
-	| SILK_BAG_OPEN SILK_BAG_CLOSE
+	| /* the rule for an empty silk bag goes here */
 		{
-			struct adv_bag b = {
-				SILK,
-				NULL
-			};
-			$$ = b;
+			/* We need to return an adv_bag struct with the type set to SILK here 
+				 We don't have any items, so what do we set the first item field on the 
+				 adv_bag struct to?
+			*/
 		}
-canvas_bag: CANVAS_BAG_OPEN items CANVAS_BAG_CLOSE
+canvas_bag: /* add the production rule for a canvas bag with items in it here */
 		{
-			struct adv_bag b = {
-				CANVAS,
-				$2
-			};
-			$$ = b;
+			/* We need to return an adv_bag struct with the type set to CANVAS here */
 		}
-	| CANVAS_BAG_OPEN CANVAS_BAG_CLOSE
+	| /* the rule for an empty canvas bag goes here */
 		{
-			struct adv_bag b = {
-				CANVAS,
-				NULL
-			};
-			$$ = b;
+			/* We need to return an adv_bag struct with the type set to CANVAS here 
+				 We don't have any items, so what do we set the first item field on the 
+				 adv_bag struct to?
+			*/
 		}
-items: one_item items
+
+items: /* recursive rule for multiple items */
 		{
-			$1->next = $2;
-			$$ = $1;
+			/*here we need to stitch together our items linked list*/	
 		}
-	|one_item
-	  {
-			$$ = $1;
+	| // base case for single items or final items
+	;
+
+one_item: // the rule for creating a single item
+		{
+			/*
+			* We need to return an item struct pointer here
+			* set all the fields and then set the next pointer to what? 
+			*/
 		}
 	;
 
-one_item: NUMBER item_names
-		{
-			struct item *i = (struct item*) MallocZ(sizeof(struct item));
-			i->count = $1;
-			i->i_name = $2;
-			i->next = NULL;
-			$$ = i;
-		}
-	;
-
+/* 
+ * this rule is provided for you to allow item names to have spaces without 
+ * overcomplicating the regular expressions needed
+ */
 item_names: item_name item_names
 		{
 			int size1 = strnlen($1, 255);
