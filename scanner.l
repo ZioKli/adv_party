@@ -1,6 +1,10 @@
 %{
 /*
- * Scanner for in-class adventuring party exercise
+ * Simple example lex input file
+ *
+ * Shawn Ostermann -- Sept 11, 2022
+ *
+ * Headstart version
  */
 
 #include <string.h>
@@ -27,61 +31,50 @@ extern int debug;
     
 }  /* Just ignore white space and commas (they're optional)*/
 
-/* replace the .* with the appropriate regular expression */
-.* {
+"\n" {
     return(EOLN);
 } 
 
-/* replace the .* with the appropriate regular expression */
-.* {
+[a-zA-Z]+ {
     yylval.string = strdup(yytext);  /* make a copy of the string */
     return(ITEM_NAME);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+[a-zA-Z\']+ {
     yylval.string = strdup(yytext);
     return(CHARACTER_NAME);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+[:\;][\)\(\]\[\<\>IDP] {
     yylval.string = strdup(yytext);
     return(PORTRAIT);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+"[" {
     return(LEATHER_BAG_OPEN);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+"{" {
     return(SILK_BAG_OPEN);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+"(" {
     return(CANVAS_BAG_OPEN);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+"]" {
     return(LEATHER_BAG_CLOSE);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+"}" {
     return(SILK_BAG_CLOSE);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+")" {
     return(CANVAS_BAG_CLOSE);
 }
 
-/* replace the .* with the appropriate regular expression */
-.* {
+[0-9]+ {
     yylval.number = atoi(yytext);
     return(NUMBER);
 } 
